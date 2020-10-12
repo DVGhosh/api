@@ -1,21 +1,39 @@
-const xhr = new XMLHttpRequest;
-const dom = document.querySelector(".text");
+const btn = document.querySelector('.btn');
 
-xhr.open("GET", "./api/sample.txt");
+const text = document.querySelector('.text');
 
-xhr.onreadystatechange = function(){
-    if(xhr.readyState === 4 && xhr.status === 200 ){
-const text = document.createElement("p");
-text.innerHTML = xhr.responseText;
-dom.appendChild(text);
-    }else{
-       console.log({
-           status:xhr.status,
-           text:xhr.statusText,
-           state: xhr.state,
-       });
-    }
-};
+const url = "./api/person.json";
 
+btn.addEventListener("click", function(){
+    load();
+})
 
-xhr.send();
+function load(){
+
+    const xhr = new XMLHttpRequest;
+
+    xhr.open("GET", url);
+
+    xhr.onreadystatechange = function(){
+
+        if(xhr.readyState === 4 && xhr.status === 200){         
+const data = JSON.parse(xhr.responseText);
+const display = data.map(function(item){
+return `<p>${item.name}</p>`
+}).join("");
+
+const element = document.createElement("div");
+element.innerHTML = display;
+text.appendChild(element);
+console.log(xhr.readyState);
+        }else{
+console.log({
+    status: xhr.status,
+    text: xhr.statusText,
+    state: xhr.readyState,
+});
+        }
+    };
+    xhr.send();
+}
+
